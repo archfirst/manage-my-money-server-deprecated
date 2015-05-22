@@ -34,6 +34,7 @@ $ gulp serve
 ```
 - `npm install` will install the required node libraries under `node_modules`.
 - `gulp serve` will start the application. It is designed for an efficient development process. As you make changes to the code, the application will restart to reflect the changes immediately.
+- `npm start` is a quick way to start the application in non-development mode.
 
 To verify that the application is working correctly, point your browser to [http://localhost:8080/accounts](http://localhost:8080/accounts) - you should see a response with a list of accounts in JSON format.
 
@@ -71,7 +72,7 @@ A better way to run the application in production is to start it using forever. 
 
 ```
 /server
-    /adapters
+    /adapter
     /application
     /domain
     /infrastructure
@@ -80,11 +81,11 @@ A better way to run the application in production is to start it using forever. 
 
 The server folder contains sub-folders that arrange the application into logical layers as suggested by the [Hexagonal Architecture](http://alistair.cockburn.us/Hexagonal+architecture) (a.k.a. the [Onion Architecture](http://jeffreypalermo.com/blog/the-onion-architecture-part-1/)):
 
-- `adapters` is the outermost layer that *adapts* interactions from the external world to the application layer. Specifically, this layer provides the RESTful API that converts incoming HTTP messages to a format acceptable by the application layer.
+- The `adapter` layer *adapts* interactions from the external world to the application layer. Currently this layer contains only the REST adapter that converts incoming HTTP messages to a format acceptable by the application layer. Technically speaking, database persistence should also be handled in this layer. However because JavaScript does not have the concept of interfaces and dependency injection (at least not very easily), we have embedded persistence in the application layer.
 
-- The `application` layer coordinates high-level activities such as creation of the domain objects and asking them to perform tasks requested by the external world.
+- The `application` layer coordinates high-level activities such as creation of the domain objects and asking them to perform tasks requested by the external world. We also handle persistence in this layer using an Object-Relational Mapping (ORM) tool called [Bookshelf](http://bookshelfjs.org/).
 
-- The `domain` layer encapsulate the state and behavior of the business domain. It consists of entities and value objects. See [this article](https://archfirst.org/domain-driven-design/) for a detailed description of the domain layer. We use an Object-Relational Mapping (ORM) tool called [Bookshelf](http://bookshelfjs.org/) to persist our entities to a SQL database.
+- The `domain` layer encapsulate the state and behavior of the business domain. It consists of entities and value objects. See [this article](https://archfirst.org/domain-driven-design/) for a detailed description of the domain layer.
 
 - The `infrastructure` layer contains common application facilities such as logging and database initialization.
 

@@ -37,8 +37,8 @@ api.use(bodyParser.json());
 api.use('/', express.static(__dirname + '/../public'));
 
 // Add API routes
-require('./AccountAdapter').addRoutes(api);
-require('./CategoryAdapter').addRoutes(api);
-require('./TransactionAdapter').addRoutes(api);
+require('./AccountResource').addRoutes(api);
+require('./CategoryResource').addRoutes(api);
+require('./TransactionResource').addRoutes(api);
 
 module.exports = api;

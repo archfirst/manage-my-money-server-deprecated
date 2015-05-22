@@ -14,9 +14,9 @@ function addRoutes(api) {
 }
 
 
-var log = require('../infrastructure/logger');
-var domain = require('../domain');
-var application = require('../application');
+var log = require('../../infrastructure/logger');
+var domain = require('../../domain');
+var application = require('../../application');
 
 var Account = domain.Account;
 var AccountService = application.AccountService;

@@ -11,7 +11,7 @@
   },
   "scripts": {
     "init": "npm install",
-    "start": "node server/server.js",
+    "start": "node server/server.js | bunyan -o short",
     "test": "gulp test"
   },
   "dependencies": {
