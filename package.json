@@ -1,13 +1,13 @@
 {
-  "name": "node-rest-template",
-  "description": "A template to develop RESTful APIs using Node.js, bookshelf.js and SQL",
+  "name": "manage-my-money-server",
+  "description": "A sample application to demonstrate best practices in Node.js, REST and Bookshelf",
   "version": "0.1.0",
   "author": "Naresh Bhatia",
   "license": "MIT",
-  "homepage": "https://github.com/archfirst/node-rest-template",
+  "homepage": "https://github.com/archfirst/manage-my-money-server",
   "repository": {
     "type": "git",
-    "url": "https://github.com/archfirst/node-rest-template.git"
+    "url": "https://github.com/archfirst/manage-my-money-server.git"
   },
   "scripts": {
     "init": "npm install",
