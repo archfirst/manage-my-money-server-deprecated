@@ -62,7 +62,7 @@ function getCategories(req, res) {
         });
 }
 
-// Returns the category
+// Returns the specified category
 function getCategory(req, res) {
 
     var id = req.params.id;

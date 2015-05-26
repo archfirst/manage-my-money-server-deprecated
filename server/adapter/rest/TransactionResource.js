@@ -52,9 +52,13 @@ function updateTransaction(req, res) {
         });
 }
 
-// Returns all transactions
+// Returns all transactions.
+// Accepts an optional query parameter called `account` to return all transactions for the specified account.
 function getTransactions(req, res) {
-    TransactionService.getTransactions()
+
+    var account_id = req.query.account;
+
+    TransactionService.getTransactions(account_id)
         .then(function(transactions) {
             res.send(transactions);
         })
@@ -64,7 +68,7 @@ function getTransactions(req, res) {
         });
 }
 
-// Returns the transaction
+// Returns the specified transaction
 function getTransaction(req, res) {
 
     var id = req.params.id;

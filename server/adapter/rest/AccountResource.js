@@ -63,7 +63,7 @@ function getAccounts(req, res) {
         });
 }
 
-// Returns the account
+// Returns the specified account
 function getAccount(req, res) {
 
     var id = req.params.id;

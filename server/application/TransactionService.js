@@ -60,9 +60,18 @@ function getTransaction(id) {
 }
 
 // Gets all transactions
+// account_id: optional - returns transactions only for the specified account
 // Returns a promise which when fulfilled provides an array of transactions.
-function getTransactions() {
-    return Transaction.fetchAll()
+function getTransactions(account_id) {
+
+    var options = {};
+    if (account_id) {
+        options.account_id = account_id;
+    }
+
+    return Transaction
+        .where(options)
+        .fetchAll()
         .then(function(transactions) {
             return transactions.load([
                 'account',
