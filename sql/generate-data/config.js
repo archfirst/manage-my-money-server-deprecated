@@ -1,5 +1,10 @@
 'use strict';
 
+var SimpleDate = require('./SimpleDate');
+
+var begDate = new SimpleDate(2013, 1,  1);
+var endDate = new SimpleDate(2015, 5, 31);
+
 var openingBalances = [
     { account_id:  1, amount:   100.00 },
     { account_id:  2, amount:  1000.00 },
@@ -13,8 +18,10 @@ var openingBalances = [
     { account_id: 10, amount: 10000.00 }
 ];
 
-var transactionStore = {
+var config = {
+    begDate: begDate,
+    endDate: endDate,
     openingBalances: openingBalances
 }
 
-module.exports = transactionStore;
+module.exports = config;

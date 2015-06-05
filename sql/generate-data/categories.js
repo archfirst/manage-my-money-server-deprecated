@@ -19,11 +19,12 @@ var categories = [
     { id: 16, name: 'Opening Balance'     },
     { id: 17, name: 'Personal Care'       },
     { id: 18, name: 'Salary'              },
-    { id: 19, name: 'Taxes'               },
-    { id: 20, name: 'Transfer'            },
-    { id: 21, name: 'Travel'              },
-    { id: 22, name: 'Unallocated Expense' },
-    { id: 23, name: 'Unallocated Income'  }
+    { id: 19, name: 'Shopping'            },
+    { id: 20, name: 'Taxes'               },
+    { id: 21, name: 'Transfer'            },
+    { id: 22, name: 'Travel'              },
+    { id: 23, name: 'Unallocated Expense' },
+    { id: 24, name: 'Unallocated Income'  }
 ];
 
 module.exports = categories;

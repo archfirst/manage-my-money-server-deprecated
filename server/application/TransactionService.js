@@ -5,10 +5,12 @@ module.exports = {
     updateTransaction: updateTransaction,
     getTransaction: getTransaction,
     getTransactions: getTransactions,
+    getTransactionsByCategory: getTransactionsByCategory,
     deleteTransaction: deleteTransaction
 };
 
 var domain = require('../domain');
+var knex = require('../infrastructure/orm').knex;
 var Transaction = domain.Transaction;
 
 // Creates a new transaction and inserts it in the database.
@@ -59,14 +61,16 @@ function getTransaction(id) {
         });
 }
 
-// Gets all transactions
-// account_id: optional - returns transactions only for the specified account
-// Returns a promise which when fulfilled provides an array of transactions.
-function getTransactions(account_id) {
+/**
+ * Gets all transactions.
+ * @param {number} [accountId] returns transactions only for the specified account
+ * @return {Promise} A promise that if resolved, returns an array of transactions
+ */
+function getTransactions(accountId) {
 
     var options = {};
-    if (account_id) {
-        options.account_id = account_id;
+    if (accountId) {
+        options.account_id = accountId;
     }
 
     return Transaction
@@ -78,6 +82,32 @@ function getTransactions(account_id) {
                 'category'
             ]);
         });
+}
+
+/**
+ * Gets transactions grouped by category.
+ * @param {Date} startDate
+ * @param {Date} endDate
+ * @return {Promise} A promise that if resolved, returns an array of transactions grouped by category:
+ * [
+ *     { cat_id: 1, cat_name: 'Auto & Transport', amount: -1000.00 },
+ *     { cat_id: 2, cat_name: 'Bills & Utilities', amount: -2000.00 },
+ *     ...
+ *     { cat_id: 8, cat_name: 'Salary', amount: 40000.00 },
+ *     ...
+ * ]
+ */
+function getTransactionsByCategory(startDate, endDate) {
+
+    return knex
+        .select(
+            'c.id as cat_id',
+            'c.name as cat_name',
+            'sum(t.amount) as amount')
+        .from('transactions as t')
+        .leftOuterJoin('categories as c', 't.category_id', 'c.id')
+        .whereBetween('t.txn_date', [startDate, endDate])
+        .groupBy('c.id');
 }
 
 // Deletes an existing transaction
