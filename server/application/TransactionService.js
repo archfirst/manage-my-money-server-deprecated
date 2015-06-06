@@ -103,7 +103,7 @@ function getTransactionsByCategory(startDate, endDate) {
         .select(
             'c.id as cat_id',
             'c.name as cat_name',
-            'sum(t.amount) as amount')
+            knex.raw('sum(t.amount) as amount'))
         .from('transactions as t')
         .leftOuterJoin('categories as c', 't.category_id', 'c.id')
         .whereBetween('t.txn_date', [startDate, endDate])

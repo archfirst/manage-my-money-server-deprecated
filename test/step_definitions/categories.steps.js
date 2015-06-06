@@ -12,6 +12,10 @@ module.exports = function() {
         this.createCategory(name, callback);
     });
 
+    this.Given(/^the following categories$/, function (table, callback) {
+        this.createCategories(table.hashes(), callback);
+    });
+
     this.When(/^I change the category name to "([^"]*)"$/, function(name, callback) {
         this.changeCategoryName(name, callback);
     });

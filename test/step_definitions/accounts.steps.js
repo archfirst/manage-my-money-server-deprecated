@@ -12,6 +12,10 @@ module.exports = function() {
         this.createAccount(name, callback);
     });
 
+    this.Given(/^the following accounts$/, function (table, callback) {
+        this.createAccounts(table.hashes(), callback);
+    });
+
     this.When(/^I change the account name to "([^"]*)"$/, function(name, callback) {
         this.changeAccountName(name, callback);
     });

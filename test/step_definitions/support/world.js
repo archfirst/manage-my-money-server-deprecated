@@ -1,22 +1,52 @@
 /* jshint expr: true */
 'use strict';
 
+var _ = require('lodash');
+var Promise = require('bluebird');
 var expect = require('./chai-helpers').expect;
+var domain = require(process.cwd() + '/server/domain');
+var application = require(process.cwd() + '/server/application');
+var Account = domain.Account;
+var Category = domain.Category;
+var Transaction = domain.Transaction;
+var AccountService = application.AccountService;
+var CategoryService = application.CategoryService;
+var TransactionService = application.TransactionService;
+
+
+// ----- Utilities -----
+// Converts each element of an array to JSON
+function toJSON(items) {
+    _.each(items, function(item, index, list) {
+        list[index] = item.toJSON();
+    });
+    return items;
+}
+
+// Returns transaction data for transmission
+function toTransactionData(transaction, accountId, categoryId) {
+    return {
+        txn_date: new Date(transaction.date),
+        payee: transaction.payee,
+        memo: transaction.memo,
+        amount: parseFloat(transaction.amount),
+        account_id: accountId,
+        category_id: categoryId
+    };
+}
 
 var World = function World(callback) {
-
+    // Cached objects
     this.account = undefined;
-    this.category = undefined;
-    this.transaction = undefined;
+    this.accounts = undefined;
 
-    var domain = require(process.cwd() + '/server/domain');
-    var application = require(process.cwd() + '/server/application');
-    var Account = domain.Account;
-    var Category = domain.Category;
-    var Transaction = domain.Transaction;
-    var AccountService = application.AccountService;
-    var CategoryService = application.CategoryService;
-    var TransactionService = application.TransactionService;
+    this.category = undefined;
+    this.categories = undefined;
+
+    this.transaction = undefined;
+    this.transactions = undefined;
+
+    this.transactionsByCategory = undefined;
 
     // ----- Accounts -----
     this.createAccount = function(name, callback) {
@@ -25,6 +55,21 @@ var World = function World(callback) {
         AccountService.createAccount({name: name})
             .then(function(account) {
                 self.account = account.toJSON();
+                callback();
+            });
+    };
+
+    this.createAccounts = function(accounts, callback) {
+        var self = this;
+
+        var tasks = [];
+        _.each(accounts, function(account) {
+            tasks.push(AccountService.createAccount({name: account.name}));
+        });
+
+        Promise.all(tasks)
+            .then(function(accounts) {
+                self.accounts = toJSON(accounts);
                 callback();
             });
     };
@@ -85,6 +130,21 @@ var World = function World(callback) {
             });
     };
 
+    this.createCategories = function(categories, callback) {
+        var self = this;
+
+        var tasks = [];
+        _.each(categories, function(category) {
+            tasks.push(CategoryService.createCategory({name: category.name}));
+        });
+
+        Promise.all(tasks)
+            .then(function(categories) {
+                self.categories = toJSON(categories);
+                callback();
+            });
+    };
+
     this.changeCategoryName = function(name, callback) {
         var self = this;
 
@@ -134,26 +194,31 @@ var World = function World(callback) {
     this.createTransaction = function(transaction, callback) {
 
         var self = this;
+        var transactionData = toTransactionData(transaction, self.account.id, self.category.id);
 
-        AccountService.createAccount({name: transaction.account})
-            .then(function(account) {
-                self.account = account.toJSON();
-                return CategoryService.createCategory({name: transaction.category});
-            })
-            .then(function(category) {
-                self.category = category.toJSON();
-                var transactionData = {
-                    txn_date: new Date(transaction.date),
-                    payee: transaction.payee,
-                    memo: transaction.memo,
-                    amount: parseFloat(transaction.amount),
-                    account_id: self.account.id,
-                    category_id: self.category.id
-                };
-                return TransactionService.createTransaction(transactionData);
-            })
+        return TransactionService.createTransaction(transactionData)
             .then(function(transaction) {
                 self.transaction = transaction.toJSON();
+                callback();
+            });
+    };
+
+    this.createTransactions = function(transactions, callback) {
+        var self = this;
+
+        var tasks = [];
+        _.each(transactions, function(transaction) {
+
+            var accountId = _.findWhere( self.accounts, {name: transaction.account} ).id;
+            var categoryId = _.findWhere( self.categories, {name: transaction.category} ).id;
+            var transactionData = toTransactionData(transaction, accountId, categoryId);
+
+            tasks.push(TransactionService.createTransaction(transactionData));
+        });
+
+        Promise.all(tasks)
+            .then(function(transactions) {
+                self.transactions = toJSON(transactions);
                 callback();
             });
     };
@@ -176,6 +241,16 @@ var World = function World(callback) {
         TransactionService.getTransaction(self.transaction.id)
             .then(function(transaction) {
                 self.transaction = transaction.toJSON();
+                callback();
+            });
+    };
+
+    this.getTransactionsByCategory = function(startDate, endDate, callback) {
+        var self = this;
+
+        TransactionService.getTransactionsByCategory(new Date(startDate), new Date(endDate))
+            .then(function(transactionsByCategory) {
+                self.transactionsByCategory = transactionsByCategory;
                 callback();
             });
     };
@@ -207,6 +282,15 @@ var World = function World(callback) {
                 // NotFoundError is expected
                 callback();
             });
+    };
+
+    this.assertTransactionsByCategory = function(expectedItems) {
+        var self = this;
+
+        _.each(expectedItems, function(expectedItem) {
+            var actualItem =  _.findWhere( self.transactionsByCategory, {cat_name: expectedItem.category} );
+            expect(actualItem.amount).to.almost.equal(parseFloat(expectedItem.amount), 2);
+        });
     };
 
     callback();

@@ -12,6 +12,10 @@ module.exports = function() {
         this.createTransaction(table.hashes()[0], callback);
     });
 
+    this.Given(/^the following transactions$/, function (table, callback) {
+        this.createTransactions(table.hashes(), callback);
+    });
+
     this.When(/^I change the transaction amount to (\-?\d*\.?\d*)$/, function(amount, callback) {
         this.changeTransactionAmount(amount, callback);
     });
