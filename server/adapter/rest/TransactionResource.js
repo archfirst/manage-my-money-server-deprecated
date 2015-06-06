@@ -53,19 +53,41 @@ function updateTransaction(req, res) {
 }
 
 // Returns all transactions.
-// Accepts an optional query parameter called `account` to return all transactions for the specified account.
+//
+// optional query parameter: account
+//     returns all transactions for the specified account
+//
+// optional query parameter: groupByCategory
+//     returns an array of transactions grouped by category
+//     requires two additional query parameters: startDate and endDate
+//     Example: /transactions?groupByCategory&startDate=2014-01-01&endDate=2014-12-31
 function getTransactions(req, res) {
 
-    var account_id = req.query.account;
+    var accountId = req.query.account;
+    var groupByCategory = req.query.groupByCategory;
+    var startDate = req.query.startDate;
+    var endDate = req.query.endDate;
 
-    TransactionService.getTransactions(account_id)
-        .then(function(transactions) {
-            res.send(transactions);
-        })
-        .catch(function(error) {
-            log.error(error);
-            res.status(500).send({'message': error.toString()});
-        });
+    if (typeof groupByCategory !== 'undefined') {
+        TransactionService.getTransactionsByCategory(new Date(startDate), new Date(endDate))
+            .then(function(transactionsByCategory) {
+                res.send(transactionsByCategory);
+            })
+            .catch(function(error) {
+                log.error(error);
+                res.status(500).send({'message': error.toString()});
+            });
+    }
+    else {
+        TransactionService.getTransactions(accountId)
+            .then(function(transactions) {
+                res.send(transactions);
+            })
+            .catch(function(error) {
+                log.error(error);
+                res.status(500).send({'message': error.toString()});
+            });
+    }
 }
 
 // Returns the specified transaction
