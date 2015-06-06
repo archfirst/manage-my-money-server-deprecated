@@ -68,13 +68,13 @@ function getTransaction(id) {
  */
 function getTransactions(accountId) {
 
-    var options = {};
+    var filterOptions = {};
     if (accountId) {
-        options.account_id = accountId;
+        filterOptions.account_id = accountId;
     }
 
     return Transaction
-        .where(options)
+        .where(filterOptions)
         .fetchAll()
         .then(function(transactions) {
             return transactions.load([
@@ -86,8 +86,8 @@ function getTransactions(accountId) {
 
 /**
  * Gets transactions grouped by category.
- * @param {Date} startDate
- * @param {Date} endDate
+ * @param {Date} [startDate] if startDate is specified then endDate must be specified
+ * @param {Date} [endDate] if endDate is specified then startDate must be specified
  * @return {Promise} A promise that if resolved, returns an array of transactions grouped by category:
  * [
  *     { cat_id: 1, cat_name: 'Auto & Transport', amount: -1000.00 },
@@ -99,15 +99,24 @@ function getTransactions(accountId) {
  */
 function getTransactionsByCategory(startDate, endDate) {
 
-    return knex
+    // Start a query builder
+    var qb = knex
         .select(
             'c.id as cat_id',
             'c.name as cat_name',
             knex.raw('sum(t.amount) as amount'))
         .from('transactions as t')
-        .leftOuterJoin('categories as c', 't.category_id', 'c.id')
-        .whereBetween('t.txn_date', [startDate, endDate])
-        .groupBy('c.id');
+        .leftOuterJoin('categories as c', 't.category_id', 'c.id');
+
+    // Add optional start and end dates
+    if (startDate && endDate) {
+        qb = qb.whereBetween('t.txn_date', [startDate, endDate]);
+    }
+
+    // Finally add the groupBy clause
+    qb = qb.groupBy('c.id');
+
+    return qb;
 }
 
 // Deletes an existing transaction

@@ -63,13 +63,24 @@ function updateTransaction(req, res) {
 //     Example: /transactions?groupByCategory&startDate=2014-01-01&endDate=2014-12-31
 function getTransactions(req, res) {
 
+    // Get query parameters
     var accountId = req.query.account;
     var groupByCategory = req.query.groupByCategory;
     var startDate = req.query.startDate;
     var endDate = req.query.endDate;
 
+    // If start and end dates are defined, convert them to Date objects
+    if (startDate) {
+        startDate = new Date(startDate);
+    }
+
+    if (endDate) {
+        endDate = new Date(endDate);
+    }
+
+    // Call TransactionService based on "groupByCategory" query parameter
     if (typeof groupByCategory !== 'undefined') {
-        TransactionService.getTransactionsByCategory(new Date(startDate), new Date(endDate))
+        TransactionService.getTransactionsByCategory(startDate, endDate)
             .then(function(transactionsByCategory) {
                 res.send(transactionsByCategory);
             })
