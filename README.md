@@ -1,5 +1,8 @@
 # Manage My Money Server
- *Manage My Money* is a simple application to record your income and expenses. It demonstrates best practices in developing applications using Node.js, REST and [Bookshelf](http://bookshelfjs.org/). The application is based on the [Node REST Template](https://github.com/archfirst/node-rest-template) to provide the basic application structure and build system.
+ *Manage My Money* is a simple application to record and analyze your income and expenses. It demonstrates best practices in developing applications using Node.js, REST and [Bookshelf](http://bookshelfjs.org/). The application is based on the [Node REST Template](https://github.com/archfirst/node-rest-template) to provide the basic application structure and build system.
+
+## Domain Model
+![Domain Model](domain-model/manage-my-money.png)
 
 ## Requirements
 
