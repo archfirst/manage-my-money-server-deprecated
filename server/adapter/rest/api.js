@@ -17,7 +17,7 @@ var enableCORS = function(req, res, next) {
 
     // intercept OPTIONS method to simply send a 200 response
     if (req.method === 'OPTIONS') {
-        res.status(200).end();
+        res.status(200).send();
     }
     else {
         next();

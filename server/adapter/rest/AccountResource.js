@@ -21,7 +21,9 @@ var application = require('../../application');
 var Account = domain.Account;
 var AccountService = application.AccountService;
 
-// Creates a new account
+/**
+ * Creates a new account.
+ */
 function createAccount(req, res) {
 
     var accountData = req.body;
@@ -36,7 +38,9 @@ function createAccount(req, res) {
         });
 }
 
-// Updates an existing account
+/**
+ * Updates an existing account.
+ */
 function updateAccount(req, res) {
 
     var accountData = req.body;
@@ -51,19 +55,9 @@ function updateAccount(req, res) {
         });
 }
 
-// Returns all accounts
-function getAccounts(req, res) {
-    AccountService.getAccounts()
-        .then(function(accounts) {
-            res.send(accounts);
-        })
-        .catch(function(error) {
-            log.error(error);
-            res.status(500).send({'message': error.toString()});
-        });
-}
-
-// Returns the specified account
+/**
+ * Gets an existing account.
+ */
 function getAccount(req, res) {
 
     var id = req.params.id;
@@ -81,7 +75,23 @@ function getAccount(req, res) {
         });
 }
 
-// Deletes the specified account
+/**
+ * Gets all accounts.
+ */
+function getAccounts(req, res) {
+    AccountService.getAccounts()
+        .then(function(accounts) {
+            res.send(accounts);
+        })
+        .catch(function(error) {
+            log.error(error);
+            res.status(500).send({'message': error.toString()});
+        });
+}
+
+/**
+ * Deletes an account.
+ */
 function deleteAccount(req, res) {
 
     var id = req.params.id;

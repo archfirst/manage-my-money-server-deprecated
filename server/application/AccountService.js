@@ -11,46 +11,63 @@ module.exports = {
 var domain = require('../domain');
 var Account = domain.Account;
 
-// Creates a new account and inserts it in the database.
-// accountData example:
-// {
-//     name: 'Cash'
-// }
-// Returns a promise which when fulfilled provides the inserted account with its id populated.
+/**
+ * Creates a new account and inserts it in to the database.
+ * @param {Object} accountData - Full account data, excluding the id. For example:
+ * {
+ *     name: 'Cash'
+ * }
+ * @return {Promise} A promise that returns a full copy of the inserted account (including the id) on fulfillment.
+ */
 function createAccount(accountData) {
     return saveAccount(accountData);
 }
 
-// Updates an existing account. Full account data must be provided, including the id
-// Returns a promise which when fulfilled provides the updated account.
-// accountData example:
-// {
-//     id: 1
-//     name: 'Cash'
-// }
+/**
+ * Updates an existing account.
+ * @param {Object} accountData - Full account data, including the id. For example:
+ * {
+ *     id: 1
+ *     name: 'Cash'
+ * }
+ * @return {Promise} A promise that returns a full copy of the updated account on fulfillment.
+ */
 function updateAccount(accountData) {
     return saveAccount(accountData);
 }
 
+/**
+ * Inserts or updates an account depending on whether the account has an `id` or not.
+ * @param {Object} accountData - Full account data, except `id` is optional.
+ * @return {Promise} A promise that returns a full copy of the account on fulfillment.
+ */
 function saveAccount(accountData) {
     var account = new Account(accountData);
     return account.save();
 }
 
-// Gets an existing account
-// Returns a promise which when fulfilled provides the account.
+/**
+ * Gets an existing account.
+ * @param {integer} id
+ * @return {Promise} A promise that returns the desired account on fulfillment.
+ */
 function getAccount(id) {
     return new Account({id: id}).fetch({require: true});
 }
 
-// Gets all accounts
-// Returns a promise which when fulfilled provides an array of accounts.
+/**
+ * Gets all accounts.
+ * @return {Promise} A promise that returns an array of all accounts on fulfillment.
+ */
 function getAccounts() {
     return Account.fetchAll();
 }
 
-// Deletes an existing account
-// Returns a promise which when fulfilled deletes the account.
+/**
+ * Deletes an account.
+ * @param {integer} id
+ * @return {Promise} A promise that gets fulfilled when the account is deleted.
+ */
 function deleteAccount(id) {
     return new Account({id: id}).destroy();
 }
