@@ -4,7 +4,9 @@ module.exports = {
     addRoutes: addRoutes
 };
 
-// Add routes to the api
+/**
+ * Adds routes to the api.
+ */
 function addRoutes(api) {
     api.post('/transactions', createTransaction);
     api.put('/transactions/:id', updateTransaction);
@@ -20,7 +22,9 @@ var application = require('../../application');
 var Transaction = domain.Transaction;
 var TransactionService = application.TransactionService;
 
-// Creates a new transaction
+/**
+ * Creates a new transaction.
+ */
 function createTransaction(req, res) {
 
     var transactionData = req.body;
@@ -36,7 +40,9 @@ function createTransaction(req, res) {
         });
 }
 
-// Updates an existing transaction
+/**
+ * Updates an existing transaction.
+ */
 function updateTransaction(req, res) {
 
     var transactionData = req.body;
@@ -52,15 +58,37 @@ function updateTransaction(req, res) {
         });
 }
 
-// Returns all transactions.
-//
-// optional query parameter: account
-//     returns all transactions for the specified account
-//
-// optional query parameter: groupByCategory
-//     returns an array of transactions grouped by category
-//     requires two additional query parameters: startDate and endDate
-//     Example: /transactions?groupByCategory&startDate=2014-01-01&endDate=2014-12-31
+/**
+ * Gets an existing transaction.
+ */
+function getTransaction(req, res) {
+
+    var id = req.params.id;
+
+    TransactionService.getTransaction(id)
+        .then(function(transaction) {
+            res.send(transaction);
+        })
+        .catch(Transaction.NotFoundError, function() {
+            res.status(404).send({'message': 'Transaction ' + id + ' does not exist'});
+        })
+        .catch(function(error) {
+            log.error(error);
+            res.status(500).send({'message': error.toString()});
+        });
+}
+
+/**
+ * Gets all transactions.
+ *
+ * optional query parameter: account
+ *     returns all transactions for the specified account
+ *
+ * optional query parameter: groupByCategory
+ *     returns an array of transactions grouped by category
+ *     requires two additional query parameters: startDate and endDate
+ *     Example: /transactions?groupByCategory&startDate=2014-01-01&endDate=2014-12-31
+ */
 function getTransactions(req, res) {
 
     // Get query parameters
@@ -101,25 +129,9 @@ function getTransactions(req, res) {
     }
 }
 
-// Returns the specified transaction
-function getTransaction(req, res) {
-
-    var id = req.params.id;
-
-    TransactionService.getTransaction(id)
-        .then(function(transaction) {
-            res.send(transaction);
-        })
-        .catch(Transaction.NotFoundError, function() {
-            res.status(404).send({'message': 'Transaction ' + id + ' does not exist'});
-        })
-        .catch(function(error) {
-            log.error(error);
-            res.status(500).send({'message': error.toString()});
-        });
-}
-
-// Deletes the specified transaction
+/**
+ * Deletes a transaction.
+ */
 function deleteTransaction(req, res) {
 
     var id = req.params.id;

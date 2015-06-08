@@ -4,7 +4,9 @@ module.exports = {
     addRoutes: addRoutes
 };
 
-// Add routes to the api
+/**
+ * Adds routes to the api.
+ */
 function addRoutes(api) {
     api.post('/categories', createCategory);
     api.put('/categories/:id', updateCategory);
@@ -20,7 +22,9 @@ var application = require('../../application');
 var Category = domain.Category;
 var CategoryService = application.CategoryService;
 
-// Creates a new category
+/**
+ * Creates a new category.
+ */
 function createCategory(req, res) {
 
     var categoryData = req.body;
@@ -35,7 +39,9 @@ function createCategory(req, res) {
         });
 }
 
-// Updates an existing category
+/**
+ * Updates an existing category.
+ */
 function updateCategory(req, res) {
 
     var categoryData = req.body;
@@ -50,19 +56,9 @@ function updateCategory(req, res) {
         });
 }
 
-// Returns all categories
-function getCategories(req, res) {
-    CategoryService.getCategories()
-        .then(function(categories) {
-            res.send(categories);
-        })
-        .catch(function(error) {
-            log.error(error);
-            res.status(500).send({'message': error.toString()});
-        });
-}
-
-// Returns the specified category
+/**
+ * Gets an existing category.
+ */
 function getCategory(req, res) {
 
     var id = req.params.id;
@@ -80,7 +76,23 @@ function getCategory(req, res) {
         });
 }
 
-// Deletes the specified category
+/**
+ * Gets all categories.
+ */
+function getCategories(req, res) {
+    CategoryService.getCategories()
+        .then(function(categories) {
+            res.send(categories);
+        })
+        .catch(function(error) {
+            log.error(error);
+            res.status(500).send({'message': error.toString()});
+        });
+}
+
+/**
+ * Deletes a category.
+ */
 function deleteCategory(req, res) {
 
     var id = req.params.id;

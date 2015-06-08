@@ -4,7 +4,9 @@ module.exports = {
     addRoutes: addRoutes
 };
 
-// Add routes to the api
+/**
+ * Adds routes to the api.
+ */
 function addRoutes(api) {
     api.post('/accounts', createAccount);
     api.put('/accounts/:id', updateAccount);

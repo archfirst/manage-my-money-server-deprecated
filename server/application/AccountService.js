@@ -27,7 +27,7 @@ function createAccount(accountData) {
  * Updates an existing account.
  * @param {Object} accountData - Full account data, including the id. For example:
  * {
- *     id: 1
+ *     id: 1,
  *     name: 'Cash'
  * }
  * @return {Promise} A promise that returns a full copy of the updated account on fulfillment.
