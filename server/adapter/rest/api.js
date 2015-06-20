@@ -34,7 +34,7 @@ api.use(bodyParser.urlencoded({extended: true}));
 api.use(bodyParser.json());
 
 // Serve static content from the public directory
-api.use('/', express.static(__dirname + '/../public'));
+api.use('/', express.static(__dirname + '/../../public'));
 
 // Add API routes
 require('./AccountResource').addRoutes(api);
