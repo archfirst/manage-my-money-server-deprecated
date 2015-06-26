@@ -21,7 +21,7 @@ var Transaction = domain.Transaction;
  *     payee: 'Chevron Gas Station',
  *     memo: 'Gas',
  *     amount: -30.00,
- *     transaction_id: 3,
+ *     account_id: 3,
  *     category_id: 1
  * }
  * @return {Promise} A promise that returns a full copy of the inserted transaction (including the id) on fulfillment.
@@ -39,7 +39,7 @@ function createTransaction(transactionData) {
  *     payee: 'Chevron Gas Station',
  *     memo: 'Gas',
  *     amount: -30.00,
- *     transaction_id: 3,
+ *     account_id: 3,
  *     category_id: 1
  * }
  * @return {Promise} A promise that returns a full copy of the updated transaction on fulfillment.
