@@ -59,9 +59,24 @@ function saveTransaction(transactionData) {
 }
 
 /**
- * Gets an existing transaction.
+ * Gets an existing transaction along with its account and category.
  * @param {integer} id
- * @return {Promise} A promise that returns the desired transaction on fulfillment.
+ * @return {Promise} A promise that returns the desired transaction on fulfillment. For example:
+ *  {
+ *     id: 1,
+ *     txn_date: '2013-01-01T00:00:00.000Z',
+ *     payee: 'Chevron Gas Station',
+ *     memo: 'Gas',
+ *     amount: -30.00,
+ *     account: {
+ *         id: 3,
+ *         name: "E*Trade Savings"
+ *     },
+ *     category: {
+ *         id: 1,
+ *         name: "Auto & Transport"
+ *     }
+ * }
  */
 function getTransaction(id) {
     return new Transaction({id: id}).fetch({require: true})
@@ -77,6 +92,7 @@ function getTransaction(id) {
  * Gets all transactions.
  * @param {number} [accountId] returns transactions only for the specified account
  * @return {Promise} A promise that returns an array of all transactions on fulfillment.
+ * Format is the same as getTransaction(), but now as an array of transactions.
  */
 function getTransactions(accountId) {
 
