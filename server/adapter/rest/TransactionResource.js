@@ -32,6 +32,10 @@ function createTransaction(req, res) {
 
     TransactionService.createTransaction(transactionData)
         .then(function(transaction) {
+            // Construct the full transaction before returning (with account and category)
+            return TransactionService.getTransaction(transaction.id)
+        })
+        .then(function(transaction) {
             res.send(transaction);
         })
         .catch(function(error) {
@@ -49,6 +53,10 @@ function updateTransaction(req, res) {
     transactionData.txn_date = new Date(transactionData.txn_date);
 
     TransactionService.updateTransaction(transactionData)
+        .then(function(transaction) {
+            // Construct the full transaction before returning (with account and category)
+            return TransactionService.getTransaction(transaction.id)
+        })
         .then(function(transaction) {
             res.send(transaction);
         })
