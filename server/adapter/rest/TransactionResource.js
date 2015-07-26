@@ -33,7 +33,7 @@ function createTransaction(req, res) {
     TransactionService.createTransaction(transactionData)
         .then(function(transaction) {
             // Construct the full transaction before returning (with account and category)
-            return TransactionService.getTransaction(transaction.id)
+            return TransactionService.getTransaction(transaction.id);
         })
         .then(function(transaction) {
             res.send(transaction);
@@ -55,7 +55,7 @@ function updateTransaction(req, res) {
     TransactionService.updateTransaction(transactionData)
         .then(function(transaction) {
             // Construct the full transaction before returning (with account and category)
-            return TransactionService.getTransaction(transaction.id)
+            return TransactionService.getTransaction(transaction.id);
         })
         .then(function(transaction) {
             res.send(transaction);
