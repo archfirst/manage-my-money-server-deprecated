@@ -1,4 +1,6 @@
-# Manage My Money Server
+# Manage My Money Server (Deprecated)
+**This version is replaced by a [new version]() which replaces [Bookshelf](http://bookshelfjs.org/) with a combination of [Knex.js](http://knexjs.org/) and [JoinJS](https://github.com/archfirst/joinjs).**
+
  *Manage My Money* is a simple application to record and analyze your income and expenses. It demonstrates best practices in developing applications using Node.js, REST and [Bookshelf](http://bookshelfjs.org/). The application is based on the [Node REST Template](https://github.com/archfirst/node-rest-template) to provide the basic application structure and build system.
 
 ## Domain Model
